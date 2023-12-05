@@ -1,21 +1,27 @@
-import { useKeyboardControls } from "@react-three/drei";
+import { CameraControls, useKeyboardControls } from "@react-three/drei";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
-import useStateEngine from "../useStateEngine";
-import { Player } from "./Player";
-import { useFrame } from "@react-three/fiber";
+import Player from "./Player";
+import { useFrame, useThree } from "@react-three/fiber";
+import { mouseMovement } from "../lib/mouseMovement";
 
-export function PlayerController() {
+export default function PlayerController() {
+  console.log("rendered");
   const playerBody = useRef();
   const characterBody = useRef();
+  const cameraRef = useRef();
+  const three = useThree();
 
   const [subscribeKeys, getKeys] = useKeyboardControls();
-
+  // const mouse = mouseMovement();
   useEffect(() => {
+    console.log(cameraRef.current);
+
     const unsubcribeJump = subscribeKeys(
       (state) => state.jump,
       (pressed) => {
         if (pressed) {
+          cameraRef.current.lockPointer();
           // console.log();
         }
         if (!pressed) {
@@ -46,7 +52,6 @@ export function PlayerController() {
       (state) => state.left,
       (pressed) => {
         if (pressed) {
-          // playerBody.current.applyTorqueImpulse({ x: 0, y: 0.1, z: 0 }, true);
         }
         if (!pressed) {
         }
@@ -81,7 +86,10 @@ export function PlayerController() {
     };
   }, []);
 
-  useFrame((state, delta) => {});
+  // const mouse = mouseMovement();
+  useFrame((state, delta) => {
+    console.log(cameraRef.current.getSpherical());
+  });
   return (
     <RigidBody
       ref={playerBody}
@@ -89,12 +97,12 @@ export function PlayerController() {
       restitution={0.2}
       friction={2}
       position={[0, 5, 0]}
-      enabledRotations={[false, true, false]}
-      linearDamping={0.5}
-      angularDamping={0.5}
+      // enabledRotations={[false, true, false]}
+      // linearDamping={0.5}
+      // angularDamping={0.5}
     >
-      <group ref={characterBody}></group>
-      <Player03 position={[0, -0.8, 0]} />
+      <CameraControls ref={cameraRef} />
+      <Player position={[0, -0.8, 0]} />
       <CapsuleCollider args={[0.5, 0.4]} translation={[0, 5, 0]} />
     </RigidBody>
   );

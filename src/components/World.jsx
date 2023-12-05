@@ -2,7 +2,7 @@ import { OrbitControls } from "@react-three/drei";
 import Lights from "./Lights";
 import Plane from "./Plane";
 import { Physics } from "@react-three/rapier";
-import Player from "./Player";
+import PlayerController from "./PlayerController";
 
 export default function World() {
   return (
@@ -13,7 +13,7 @@ export default function World() {
       <Physics>
         <Lights />
         <Plane />
-        <Player />
+        <PlayerController />
       </Physics>
     </>
   );
