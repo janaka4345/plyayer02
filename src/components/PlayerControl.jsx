@@ -12,25 +12,14 @@ export function PlayerController() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
   useEffect(() => {
-    const unsubsribeAnimation = useStateEngine.subscribe(
-      (state) => state.currentState,
-      (value) => {
-        currAnimation.current = value;
-        // console.log("cur:", value);
-        // actions[prevAnimation.current].fadeOut(0.5);
-        // actions[value].reset().fadeIn(0.5).play();
-      },
-    );
     const unsubcribeJump = subscribeKeys(
       (state) => state.jump,
       (pressed) => {
         if (pressed) {
           // console.log();
-          setAnimationState("TPose");
         }
         if (!pressed) {
           // console.log("jump", pressed);
-          setAnimationState("Idle");
         }
       },
     );
@@ -38,11 +27,9 @@ export function PlayerController() {
       (state) => state.forward,
       (pressed) => {
         if (pressed) {
-          setAnimationState("Walk");
         }
 
         if (!pressed) {
-          setAnimationState("Idle");
         }
       },
     );
@@ -50,10 +37,8 @@ export function PlayerController() {
       (state) => state.back,
       (pressed) => {
         if (pressed) {
-          setAnimationState("Walk");
         }
         if (!pressed) {
-          setAnimationState("Idle");
         }
       },
     );
@@ -62,10 +47,8 @@ export function PlayerController() {
       (pressed) => {
         if (pressed) {
           // playerBody.current.applyTorqueImpulse({ x: 0, y: 0.1, z: 0 }, true);
-          setAnimationState("Walk");
         }
         if (!pressed) {
-          setAnimationState("Idle");
         }
       },
     );
@@ -73,27 +56,18 @@ export function PlayerController() {
       (state) => state.right,
       (pressed) => {
         if (pressed) {
-          // playerBody.current.applyTorqueImpulse({ x: 0, y: -0.1, z: 0 }, true);
-          setAnimationState("Walk");
         }
         if (!pressed) {
-          setAnimationState("Idle");
         }
       },
     );
     const unsubcribeShift = subscribeKeys(
       (state) => state.run,
       (pressed) => {
-        if (pressed && currAnimation.current === "Walk") {
-          setAnimationState("Run");
-          return;
-        }
-        if (!pressed && currAnimation.current === "Walk") {
-          setAnimationState("Walk");
+        if (pressed) {
           return;
         }
         if (!pressed) {
-          setAnimationState("Idle");
         }
       },
     );
@@ -104,7 +78,6 @@ export function PlayerController() {
       unsubcribeLeft();
       unsubcribeRight();
       unsubcribeShift();
-      unsubsribeAnimation();
     };
   }, []);
 
@@ -120,10 +93,7 @@ export function PlayerController() {
       linearDamping={0.5}
       angularDamping={0.5}
     >
-      <group ref={characterBody}>
-        {/* <Player position={[0, -0.8, 0]} /> */}
-      </group>
-      {/* <Player02 position={[0, -0.8, 0]} /> */}
+      <group ref={characterBody}></group>
       <Player03 position={[0, -0.8, 0]} />
       <CapsuleCollider args={[0.5, 0.4]} translation={[0, 5, 0]} />
     </RigidBody>
