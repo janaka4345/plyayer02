@@ -7,9 +7,7 @@ export default function Player(props) {
   const group = useRef();
 
   const { nodes, materials, animations } = useGLTF("./Soldier.glb");
-  // console.log(animations);
   const { actions, mixer } = useAnimations(animations, group);
-  // const [subscribeKeys, getKeys] = useKeyboardControls();
 
   useEffect(() => {}, []);
 

@@ -3,27 +3,14 @@ import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import useStateEngine from "../useStateEngine";
 import { Player } from "./Player";
-import { Player02 } from "./Player02";
 import { useFrame } from "@react-three/fiber";
-import { Player03 } from "./Player03";
 
 export function PlayerController() {
-  console.log("hi");
-
-  const JUMP_FORCE = 0.5;
-  const MOVEMENT_SPEED = 4;
-  const MAX_VEL = 3;
-  let changeRotation = false;
-
   const playerBody = useRef();
   const characterBody = useRef();
-  const currAnimation = useRef();
 
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
-  const setAnimationState = useStateEngine((state) => state.setState);
-  // const setLinVel = useStateEngine((state) => state.setLinVel);
-  // const setImpulse = useStateEngine((state) => state.setImpulse);
   useEffect(() => {
     const unsubsribeAnimation = useStateEngine.subscribe(
       (state) => state.currentState,
@@ -121,55 +108,7 @@ export function PlayerController() {
     };
   }, []);
 
-  useFrame((state, delta) => {
-    const impulse = { x: 0, y: 0, z: 0 };
-    const linVel = playerBody.current.linvel();
-    let changeRotation = false;
-
-    // if (jumpPressed && isOnFloor.current) {
-    //   impulse.y += JUMP_FORCE;
-    //   changeRotation = true;
-    //   isOnFloor.current = false;
-    // }
-    if (getKeys().forward && linVel.z > -MAX_VEL) {
-      impulse.z -= MOVEMENT_SPEED * delta * 10;
-      changeRotation = true;
-    }
-    if (getKeys().forward && getKeys().run && linVel.z > -MAX_VEL * 3) {
-      impulse.z -= MOVEMENT_SPEED * delta * 10;
-      changeRotation = true;
-    }
-    if (getKeys().back && linVel.z < MAX_VEL) {
-      impulse.z += MOVEMENT_SPEED * delta * 10;
-      changeRotation = true;
-    }
-    if (getKeys().left && linVel.x > -MAX_VEL) {
-      impulse.x -= MOVEMENT_SPEED * delta * 10;
-      changeRotation = true;
-    }
-    if (getKeys().right && linVel.x < MAX_VEL) {
-      impulse.x += MOVEMENT_SPEED * delta * 10;
-      changeRotation = true;
-    }
-
-    // console.log(impulse);
-
-    playerBody.current.applyImpulse(impulse, true);
-    if (changeRotation) {
-      // console.log(changeRotation);
-      const angle = Math.atan2(linVel.x, linVel.z);
-      /*
-       *add qurtanions for rotation
-       */
-      // const eular
-      ///      playerBody.current.setRotation({ w: 1.0, x: 0.0, y: 1, z: 0.0 });
-    }
-    // if (!changeRotation) {
-    // console.log(changeRotation);
-    // const angle = Math.atan2(linVel.x, linVel.z);
-    // playerBody.current.resetTorqueImpulse();
-    // }
-  });
+  useFrame((state, delta) => {});
   return (
     <RigidBody
       ref={playerBody}
